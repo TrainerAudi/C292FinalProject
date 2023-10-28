@@ -4,42 +4,86 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] int MAX_X_VELOCITY = 5;
-    [SerializeField] int MAX_Y_VELOCITY = 5;
+    private Rigidbody2D rb;
+    private Animator anim;
+    private SpriteRenderer sprite;
+    private BoxCollider2D collider;
+
+    private float dirX;
+
+    [SerializeField] float moveSpeed = 9f;
+    [SerializeField] float jumpForce = 14f;
+    [SerializeField] private LayerMask jumpable;
+    [SerializeField] int hungerStat = 3;
+    [SerializeField] bool canJump;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody2D>();
+        sprite = GetComponent<SpriteRenderer>();
+        anim = GetComponent<Animator>();
+        collider = GetComponent<BoxCollider2D>();
+
+        canJump = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown("space") || Input.GetKeyDown("w") || Input.GetKeyDown("up"))
+        dirX = Input.GetAxisRaw("Horizontal");
+
+        rb.velocity = new Vector2(dirX * moveSpeed, rb.velocity.y);
+
+        if (Input.GetButtonDown("Jump") && isGrounded() && canJump)
         {
-            GetComponent<Rigidbody2D>().velocity += new Vector2(0, 8);
-            if (GetComponent<Rigidbody2D>().velocity.y > MAX_Y_VELOCITY)
+            hungerStat--;
+            Debug.Log("Hunger: " + getHunger());
+
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+
+            if (hungerStat == 0)
             {
-                GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, MAX_Y_VELOCITY);
+                canJump = false;
             }
         }
-        if (Input.GetKey("d") || Input.GetKey("right"))
+
+        UpdateAnimation();
+    }
+
+    public void changeHunger(int hungerStat)
+    {
+        this.hungerStat += hungerStat;
+    }
+
+    // Grab the hunger stat
+    public int getHunger()
+    {
+        return hungerStat;
+    }
+
+    // This allows running animation to be played
+    private void UpdateAnimation()
+    {
+        if (dirX > 0f)
         {
-            GetComponent<Rigidbody2D>().velocity += new Vector2(5, 0);
-            if (GetComponent<Rigidbody2D>().velocity.x > MAX_X_VELOCITY)
-            {
-                GetComponent<Rigidbody2D>().velocity = new Vector2(MAX_X_VELOCITY, GetComponent<Rigidbody2D>().velocity.y);
-            }
+            anim.SetBool("Running", true);
+            sprite.flipX = false;
         }
-        if (Input.GetKey("a") || Input.GetKey("left"))
+        else if (dirX < 0f)
         {
-            GetComponent<Rigidbody2D>().velocity += new Vector2(-5, 0);
-            if (GetComponent<Rigidbody2D>().velocity.x < 0- MAX_X_VELOCITY)
-            {
-                GetComponent<Rigidbody2D>().velocity = new Vector2(0-MAX_X_VELOCITY, GetComponent<Rigidbody2D>().velocity.y);
-            }
+            anim.SetBool("Running", true);
+            sprite.flipX = true;
         }
-        
+        else
+        {
+            anim.SetBool("Running", false);
+        }
+    }
+
+    private bool isGrounded()
+    {
+        return Physics2D.BoxCast(collider.bounds.center, collider.bounds.size, 0f, Vector2.down, .1f, jumpable);
     }
 }
+
