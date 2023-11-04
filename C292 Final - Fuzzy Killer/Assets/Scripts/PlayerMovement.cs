@@ -51,12 +51,18 @@ public class PlayerMovement : MonoBehaviour
         UpdateAnimation();
     }
 
+    // changes hunger stat
     public void changeHunger(int hungerStat)
     {
+        if (!canJump)
+        {
+            canJump = true;
+        }
+
         this.hungerStat += hungerStat;
     }
 
-    // Grab the hunger stat
+    // returns the hunger stat
     public int getHunger()
     {
         return hungerStat;
