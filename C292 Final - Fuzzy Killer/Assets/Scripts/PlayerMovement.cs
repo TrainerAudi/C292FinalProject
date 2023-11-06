@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    private Rigidbody2D rb;
     private Animator anim;
     private SpriteRenderer sprite;
     private BoxCollider2D collider;
 
     private float dirX;
 
+    [SerializeField] Rigidbody2D rb;
     [SerializeField] float moveSpeed = 9f;
     [SerializeField] float jumpForce = 14f;
     [SerializeField] private LayerMask jumpable;
@@ -20,7 +20,6 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         collider = GetComponent<BoxCollider2D>();
@@ -46,6 +45,11 @@ public class PlayerMovement : MonoBehaviour
             {
                 canJump = false;
             }
+        }
+
+        if (hungerStat == 0)
+        {
+            canJump = false;
         }
 
         UpdateAnimation();
@@ -91,5 +95,6 @@ public class PlayerMovement : MonoBehaviour
     {
         return Physics2D.BoxCast(collider.bounds.center, collider.bounds.size, 0f, Vector2.down, .1f, jumpable);
     }
+
 }
 

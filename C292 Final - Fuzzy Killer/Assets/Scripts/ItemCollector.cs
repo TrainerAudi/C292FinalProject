@@ -8,7 +8,7 @@ public class ItemCollector : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Fish"))
+        if (collision.gameObject.tag == "Fish")
         {
             if (player.GetComponent<PlayerMovement>().getHunger() < 3)
             {
