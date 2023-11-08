@@ -13,7 +13,6 @@ public class ItemCollector : MonoBehaviour
             if (player.GetComponent<PlayerMovement>().getHunger() < 3)
             {
                 player.GetComponent<PlayerMovement>().changeHunger(1);
-                Debug.Log("Hunger: " + player.GetComponent<PlayerMovement>().getHunger());
             }
 
             Destroy(collision.gameObject);

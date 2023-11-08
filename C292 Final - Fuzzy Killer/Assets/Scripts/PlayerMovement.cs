@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private LayerMask jumpable;
     [SerializeField] int hungerStat = 3;
     [SerializeField] bool canJump;
+    [SerializeField] TextMeshProUGUI hungerText;
 
     // Start is called before the first frame update
     void Start()
@@ -36,8 +38,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetButtonDown("Jump") && isGrounded() && canJump)
         {
-            hungerStat--;
-            Debug.Log("Hunger: " + getHunger());
+            changeHunger(-1);
 
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
 
@@ -56,14 +57,16 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // changes hunger stat
-    public void changeHunger(int hungerStat)
+    public void changeHunger(int amt)
     {
         if (!canJump)
         {
             canJump = true;
         }
 
-        this.hungerStat += hungerStat;
+        this.hungerStat += amt;
+
+        hungerText.text = "Hunger: " + this.hungerStat.ToString();
     }
 
     // returns the hunger stat
