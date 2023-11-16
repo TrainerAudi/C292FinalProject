@@ -10,7 +10,7 @@ public class ItemCollector : MonoBehaviour
     {
         if (collision.gameObject.tag == "Fish")
         {
-            if (player.GetComponent<PlayerMovement>().getHunger() < 3)
+            if (player.GetComponent<PlayerMovement>().getHunger() < 4)
             {
                 player.GetComponent<PlayerMovement>().changeHunger(1);
             }

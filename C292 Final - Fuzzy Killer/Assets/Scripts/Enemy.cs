@@ -5,7 +5,9 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     private SpriteRenderer sprite;
+    private float distance;
 
+    [SerializeField] GameObject player;
     [SerializeField] float speed = 10f;
     [SerializeField] Rigidbody2D rb;
 
@@ -19,7 +21,11 @@ public class Enemy : MonoBehaviour
 
         if (gameObject.tag == "Slime")
         {
-            speed = 3f; 
+            speed = 2f; 
+        }
+        if (gameObject.tag == "Bat")
+        {
+            speed = 4f;
         }
 
         rb.velocity = new Vector2(0 - speed, rb.velocity.y);
@@ -28,15 +34,21 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (gameObject.tag == "Bat")
+        {
+            distance = Vector2.Distance(transform.position, player.transform.position);
+            Vector2 direction = player.transform.position - transform.position;
 
+            transform.position = Vector2.MoveTowards(this.transform.position, player.transform.position, speed * Time.deltaTime);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Player")
-        { 
-            Destroy(gameObject);
+        {
             Destroy(collision.gameObject);
+            Destroy(gameObject);
         }
         if (collision.gameObject.tag == "PointA")
         {

@@ -16,8 +16,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float jumpForce = 14f;
     [SerializeField] private LayerMask jumpable;
     [SerializeField] int hungerStat = 3;
+    [SerializeField] int score = 0;
     [SerializeField] bool canJump;
     [SerializeField] TextMeshProUGUI hungerText;
+    [SerializeField] TextMeshProUGUI scoreText;
 
     // Start is called before the first frame update
     void Start()
@@ -98,6 +100,5 @@ public class PlayerMovement : MonoBehaviour
     {
         return Physics2D.BoxCast(collider.bounds.center, collider.bounds.size, 0f, Vector2.down, .1f, jumpable);
     }
-
 }
 
