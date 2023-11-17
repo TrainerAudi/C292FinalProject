@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -16,10 +17,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float jumpForce = 14f;
     [SerializeField] private LayerMask jumpable;
     [SerializeField] int hungerStat = 3;
-    [SerializeField] int score = 0;
     [SerializeField] bool canJump;
     [SerializeField] TextMeshProUGUI hungerText;
-    [SerializeField] TextMeshProUGUI scoreText;
 
     // Start is called before the first frame update
     void Start()
@@ -56,6 +55,17 @@ public class PlayerMovement : MonoBehaviour
         }
 
         UpdateAnimation();
+
+        if (Input.GetButtonDown("Submit") && (SceneManager.GetActiveScene().buildIndex == 0 || SceneManager.GetActiveScene().buildIndex == 1))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
+
+        if (Input.GetButtonDown("Submit") && (SceneManager.GetActiveScene().buildIndex == 5))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 5);
+        }
+
     }
 
     // changes hunger stat
